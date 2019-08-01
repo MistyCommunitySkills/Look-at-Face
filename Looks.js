@@ -142,14 +142,14 @@ function _FaceFollow(data){
 		var pastBearing = misty.Get("pastBearing");
 		var pastElevation = misty.Get("pastElevation");
 		if (Math.sign(pastBearing) == Math.sign(bearing) && Math.abs(misty.Get("setYaw")-to_yaw)>=0.1){ //0.2
-misty.MoveHeadPosition(null,null, to_yaw);
-misty.MoveHeadPosition(null, 0,null);
-			misty.Set("setYaw", to_yaw);
+misty.MoveHeadPosition(null,null, to_yaw, 100);
+misty.MoveHeadPosition(null, 0,null, 100);
+			misty.Set("setYaw", to_yaw, 100);
 
 		}
 		if (Math.sign(pastElevation) == Math.sign(elevation) && Math.abs(misty.Get("setPitch")-to_pitch)>=0.1){ //0.2 much better
-misty.MoveHeadPosition( to_pitch,null,null);
-misty.MoveHeadPosition(null, 0,null);
+misty.MoveHeadPosition( to_pitch,null,null, 100);
+misty.MoveHeadPosition(null, 0,null, 100);
 			misty.Set("setPitch", to_pitch);
 		}
 		
