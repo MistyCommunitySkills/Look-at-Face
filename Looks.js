@@ -68,8 +68,8 @@ function _Touched(data) {
 			case "CapTouch_Chin":
 				blue_up();
 				misty.PlayAudio("chin_amp.wav");
-				misty.Set("eyeMemory", "Happy.png");
-				misty.DisplayImage("Happy.png");
+				misty.Set("eyeMemory", "DefaultEyes_Joy.jpg");
+				misty.DisplayImage("DefaultEyes_Joy.jpg");
 				misty.Set("blinkStartTime",(new Date()).toUTCString());
 				misty.Set("timeBetweenBlink",3);
 				blink_now();
@@ -79,8 +79,8 @@ misty.MoveHeadPosition(null, -4.5,null);
 			case "CapTouch_HeadLeft":
 				blue_up();
 				misty.PlayAudio("head_amp.wav");
-				misty.Set("eyeMemory", "Wonder.png");
-				misty.DisplayImage("Wonder.png");
+				misty.Set("eyeMemory", "DefaultEyes_Amazement.jpg");
+				misty.DisplayImage("DefaultEyes_Amazement.jpg");
 				misty.Set("blinkStartTime",(new Date()).toUTCString());
 				misty.Set("timeBetweenBlink",3);
 				blink_now();
@@ -90,8 +90,8 @@ misty.MoveHeadPosition(null, 4.5,null);
 			default:
 				red_up();
 				misty.PlayAudio("043-Bbbaaah.wav");
-				misty.DisplayImage("Angry.png");
-				misty.Set("eyeMemory", "Angry.png");
+				misty.DisplayImage("DefaultEyes_Anger.jpg");
+				misty.Set("eyeMemory", "DefaultEyes_Anger.jpg");
 				misty.Set("blinkStartTime",(new Date()).toUTCString());
 				misty.Set("timeBetweenBlink",3);
 				misty.Set("touchTimeout", 3);
@@ -186,14 +186,14 @@ function min_increment(value){
 }
 
 //-------------------------Blink--------------------------------------------------------
-misty.Set("eyeMemory", "Homeostasis.png");
+misty.Set("eyeMemory", "DefaultEyes_DefaultContent.jpg");
 misty.Set("blinkStartTime",(new Date()).toUTCString());
 misty.Set("timeBetweenBlink",5);
 
 function blink_now(){
     misty.Set("blinkStartTime",(new Date()).toUTCString());
     misty.Set("timeBetweenBlink",getRandomInt(2, 8));
-    misty.DisplayImage("blinkMisty.png");
+    misty.DisplayImage("DefaultEyes_SystemBlinkStandard.jpg");
     misty.Pause(200);
     misty.DisplayImage(misty.Get("eyeMemory"));
 }
