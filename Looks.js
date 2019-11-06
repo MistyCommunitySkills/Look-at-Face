@@ -18,8 +18,8 @@ misty.Debug("Starting Looks !!");
 misty.Set("pitch", 0.0);
 misty.Set("yaw", 0.0);
 misty.Set("roll", 0.0);
-misty.MoveArmPosition("left", 0, 45);
-misty.MoveArmPosition("right", 0, 45);
+misty.MoveArm("left", 0, 45);
+misty.MoveArm("right", 0, 45);
 
 misty.Set("faceDetectedAt", (new Date()).toUTCString());
 misty.Set("pastElevation", 0.0);
@@ -31,7 +31,7 @@ misty.Set("touchAt", (new Date()).toUTCString());
 misty.Set("inTouch",false);
 
 misty.Debug("Centering Head");
-misty.MoveHeadPosition(0, 0, 0, 100);
+misty.MoveHead(0, 0, 0, 100);
 misty.Pause(3000);
 
 // Used for LED gradient changes
@@ -74,7 +74,7 @@ function _Touched(data) {
 				misty.Set("timeBetweenBlink",3);
 				blink_now();
 				misty.Set("touchTimeout", 6);
-misty.MoveHeadPosition(null, -4.5,null);
+misty.MoveHead(null, -4.5,null);
 			 	break;
 			case "CapTouch_HeadLeft":
 				blue_up();
@@ -85,7 +85,7 @@ misty.MoveHeadPosition(null, -4.5,null);
 				misty.Set("timeBetweenBlink",3);
 				blink_now();
 				misty.Set("touchTimeout", 6);
-misty.MoveHeadPosition(null, 4.5,null);
+misty.MoveHead(null, 4.5,null);
 			 	break;
 			default:
 				red_up();
@@ -134,6 +134,7 @@ function _FaceFollow(data){
 
 		var to_pitch = misty.Get("pitch"); 
 		var to_yaw = misty.Get("yaw"); 
+		misty.Debug("Current settings pitch: " + to_pitch + " yaw: " + to_yaw)
 		to_pitch = set_in_range(to_pitch + elevation);
 		to_yaw = set_in_range(to_yaw + bearing);
 
@@ -142,14 +143,24 @@ function _FaceFollow(data){
 		var pastBearing = misty.Get("pastBearing");
 		var pastElevation = misty.Get("pastElevation");
 		if (Math.sign(pastBearing) == Math.sign(bearing) && Math.abs(misty.Get("setYaw")-to_yaw)>=0.1){ //0.2
-misty.MoveHeadPosition(null,null, to_yaw);
-misty.MoveHeadPosition(null, 0,null);
+			/** I had to adjust the to_yaw value to make up for the new API calls (misty.MoveHead())
+			 *  There is probably a better solution to this but I did not want to modify the above code.
+			 *  For some reason the value stored in Misty is from range (-5,5) but the new misty.MoveHead() function does not
+			 *  use that range.
+			 *  11/4/2019 Brandon Geraci
+			 */
+			misty.MoveHead(null,null, (to_yaw * 16.2),100);
+			misty.MoveHead(null, 0,null,100);
 			misty.Set("setYaw", to_yaw);
 
 		}
 		if (Math.sign(pastElevation) == Math.sign(elevation) && Math.abs(misty.Get("setPitch")-to_pitch)>=0.1){ //0.2 much better
-misty.MoveHeadPosition( to_pitch,null,null);
-misty.MoveHeadPosition(null, 0,null);
+			/** I had to adjust the to_pitch value to make up for the new API calls
+			 *  There is probably a better solution to this but I did not want to modify the above code.
+			 *  11/4/2019 Brandon Geraci
+			 */
+			misty.MoveHead( (to_pitch * 6.6),null,null,100);
+			misty.MoveHead(null, 0,null,100);
 			misty.Set("setPitch", to_pitch);
 		}
 		
@@ -157,7 +168,7 @@ misty.MoveHeadPosition(null, 0,null);
 		misty.Set("pastElevation", elevation);
 		misty.Set("pastBearing", bearing);       
 		//misty.Debug(to_yaw+" , "+to_pitch);
-        //misty.MoveHeadPosition(to_pitch, 0, to_yaw, 100);
+        //misty.MoveHead(to_pitch, 0, to_yaw, 100);
         misty.Set("pitch", to_pitch);
 		misty.Set("yaw", to_yaw);
 		
@@ -205,8 +216,8 @@ misty.Set("timeBetweenHandMotion",5);
 function move_hands(){
     misty.Set("handsStartTime",(new Date()).toUTCString());
 	misty.Set("timeBetweenHandMotion",getRandomInt(5, 10));
-	misty.MoveArmPosition("left", getRandomInt(0, 7), getRandomInt(50, 100));
-	misty.MoveArmPosition("right", getRandomInt(0, 7), getRandomInt(50, 100));
+	misty.MoveArm("left", getRandomInt(0, 7), getRandomInt(50, 100));
+	misty.MoveArm("right", getRandomInt(0, 7), getRandomInt(50, 100));
 }
 
 //-------------------------Look Around-----------------------------------------------------
@@ -218,8 +229,9 @@ function look_around(){
 	}
 	misty.Debug("LOOKING AROUND");
     misty.Set("lookStartTime",(new Date()).toUTCString());
-    misty.Set("timeInLook",getRandomInt(5, 10));
-    misty.MoveHeadPosition(gaussianRandom(-5,5), gaussianRandom(-5,5), gaussianRandom(-5,5), 100);
+	misty.Set("timeInLook",getRandomInt(5, 10));
+	/** This had to be updated because of the new api call.  */
+    misty.MoveHead(gaussianRandom(-40,26), gaussianRandom(-40,40), gaussianRandom(-81,81), 100);
 }
 
 //--------------------------LED Gradients----------------------------------------------------
@@ -320,7 +332,7 @@ while (true) {
 	if (misty.Get("inTouch") && secondsPast(misty.Get("touchAt")) > misty.Get("touchTimeout")){
 		misty.Set("inTouch", false);
 		misty.Set("eyeMemory", "Homeostasis.png");
-misty.MoveHeadPosition(null, 0,null);
+misty.MoveHead(null, 0,null);
 		if (misty.Get("lookAround")){
 			purple_up();
 		} else {
