@@ -1,10 +1,19 @@
 {
-  "Name": "LooksAtFace",
-  "UniqueId": "644e02d7-9391-4d84-8af5-3baa85bf42ac",
-  "StartupRules": ["Manual"],
+  "Name": "looks",
+  "UniqueId": "cdf02cf8-12fc-4205-931e-f61716811d18",
+  "Description": "My skill is amazing!",
+  "StartupRules": [
+    "Manual",
+    "Robot"
+  ],
   "Language": "javascript",
   "BroadcastMode": "debug",
   "TimeoutInSeconds": 36000,
-  "CleanupOnCancel": true,
-  "WriteToLog": false
+  "CleanupOnCancel": false,
+  "WriteToLog": false,
+  "Parameters": {
+    "int": 10,
+    "double": 20.5,
+    "string": "twenty"
+  }
 }
